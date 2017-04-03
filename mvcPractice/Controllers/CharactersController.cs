@@ -49,7 +49,7 @@ namespace mvcPractice.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Character character)
+        public ActionResult Create([Bind(Include = "Id,Name,Intelligence,Vitality,Strength,Mind")] Character character)
         {
             if (ModelState.IsValid)
             {
@@ -70,6 +70,9 @@ namespace mvcPractice.Controllers
 
                 Guid userIdGuid;
                 character.UserId = userIdValue != null && Guid.TryParse(userIdValue, out userIdGuid) ? userIdGuid : Guid.Empty;
+
+                character.Health = (short)((character.Vitality + character.Strength) * 100);
+
                 db.Characters.Add(character);
                 db.SaveChanges();
                 return RedirectToAction("Index");
