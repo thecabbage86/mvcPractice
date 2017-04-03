@@ -7,9 +7,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using mvcPractice.Models;
+using System.Web.Security;
+using System.Security.Claims;
 
 namespace mvcPractice.Controllers
 {
+    [Authorize]
     public class CharactersController : Controller
     {
         private CharacterDBContext db = new CharacterDBContext();
@@ -46,10 +49,27 @@ namespace mvcPractice.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserId,Name")] Character character)
+        public ActionResult Create([Bind(Include = "Id,Name")] Character character)
         {
             if (ModelState.IsValid)
             {
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                string userIdValue = null;
+                if (claimsIdentity != null)
+                {
+                    // the principal identity is a claims identity.
+                    // now we need to find the NameIdentifier claim
+                    var userIdClaim = claimsIdentity.Claims
+                        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+
+                    if (userIdClaim != null)
+                    {
+                        userIdValue = userIdClaim.Value;
+                    }
+                }
+
+                Guid userIdGuid;
+                character.UserId = userIdValue != null && Guid.TryParse(userIdValue, out userIdGuid) ? userIdGuid : Guid.Empty;
                 db.Characters.Add(character);
                 db.SaveChanges();
                 return RedirectToAction("Index");
