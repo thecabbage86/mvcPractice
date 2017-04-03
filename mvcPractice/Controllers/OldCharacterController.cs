@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace mvcPractice.Controllers
 {
-    public class CharacterController : Controller
+    public class OldCharacterController : Controller
     {
         // GET: Character
         public ActionResult Index()

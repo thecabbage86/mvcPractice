@@ -14,14 +14,14 @@ namespace mvcPractice.Models
         //public CharacterStats Stats { get; set; }
     }
 
-    public class CharacterStats
-    {
-        public int Health { get; set; }
-        public int Intelligence { get; set; }
-        public int Vitality { get; set; }
-        public int Strength { get; set; }
-        public int Mind { get; set; }
-    }
+    //public class CharacterStats
+    //{
+    //    public int Health { get; set; }
+    //    public int Intelligence { get; set; }
+    //    public int Vitality { get; set; }
+    //    public int Strength { get; set; }
+    //    public int Mind { get; set; }
+    //}
 
     public class CharacterDBContext : DbContext
     {
