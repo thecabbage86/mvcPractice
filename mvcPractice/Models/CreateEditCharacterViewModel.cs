@@ -23,7 +23,7 @@ namespace mvcPractice.Models
 
         [Range(1, 10)]
         [Display(Description = "Governs defense. Max point allocation: 10")]
-        public short Vitality { get; set; }
+        public short Vitality { get; set; } 
 
         [Range(1, 10)]
         [Display(Description = "Governs attack power. Max point allocation: 10")]
