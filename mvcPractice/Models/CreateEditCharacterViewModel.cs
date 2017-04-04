@@ -28,7 +28,7 @@ namespace mvcPractice.Models
         [Range(1, 10)]
         [Display(Description = "Governs attack power. Max point allocation: 10")]
         public short Strength { get; set; } 
-
+         
         [Range(1, 10)]
         [Display(Description = "Governs magic defense. Max point allocation: 10")]
         public short Mind { get; set; }
