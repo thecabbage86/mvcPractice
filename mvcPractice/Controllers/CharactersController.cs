@@ -42,7 +42,15 @@ namespace mvcPractice.Controllers
         // GET: Characters/Create
         public ActionResult Create()
         {
-            return View();
+            CreateEditCharacterViewModel createCharacter = new CreateEditCharacterViewModel
+            {
+                Intelligence = 5,
+                Mind = 5,
+                Strength = 5,
+                Vitality = 5
+            };
+
+            return View(createCharacter);
         }
 
         // POST: Characters/Create
@@ -56,7 +64,7 @@ namespace mvcPractice.Controllers
             {
                 Character character = new Character(createCharacter);
                 character.UserId = GetUserId();
-
+                
                 db.Characters.Add(character);
                 db.SaveChanges();
                 return RedirectToAction("Index");

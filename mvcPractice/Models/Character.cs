@@ -31,6 +31,8 @@ namespace mvcPractice.Models
         public int Level { get; set; }
 
         public short Health { get { return (short)((this.Vitality + this.Strength) * 100); } set { } }
+
+        [Display(Name = "Magic Points")]
         public short MagicPoints { get { return (short)((this.Intelligence + this.Mind) * 10); } set { } }
 
         [Range(1, 10)]
