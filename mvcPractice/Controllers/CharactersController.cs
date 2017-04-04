@@ -15,7 +15,13 @@ namespace mvcPractice.Controllers
     [Authorize]
     public class CharactersController : Controller
     {
-        private CharacterDBContext db = new CharacterDBContext();
+        private CharacterDBContext db;
+
+        public CharactersController()
+        {
+            Database.SetInitializer(new DropCreateDatabaseAlways<CharacterDBContext>());
+            db = new CharacterDBContext();
+        }
 
         // GET: Characters
         public ActionResult Index()
@@ -101,10 +107,12 @@ namespace mvcPractice.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserId,Name")] Character character)
+        public ActionResult Edit([Bind(Include = "Id,Name,Intelligence,Vitality,Strength,Mind")] Character character)
         {
             if (ModelState.IsValid)
             {
+                character.Health = (short)((character.Vitality + character.Strength) * 100);
+
                 db.Entry(character).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
