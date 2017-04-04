@@ -11,6 +11,7 @@ namespace mvcPractice.Models
     {
         public Character()
         {
+            this.Level = 1;
         }
 
         public Character(CreateEditCharacterViewModel createCharacter)
@@ -20,13 +21,17 @@ namespace mvcPractice.Models
             this.Mind = createCharacter.Mind;
             this.Strength = createCharacter.Strength;
             this.Vitality = createCharacter.Vitality;
+            this.Level = 1;
         }
 
         public int Id { get; set; }
         public Guid UserId { get; set; }
         public string Name { get; set; }
+        //public CharacterClass Class { get; set; }
+        public int Level { get; set; }
 
-        public short Health { get { return (short)((this.Vitality + this.Strength) * 100); } }
+        public short Health { get { return (short)((this.Vitality + this.Strength) * 100); } set { } }
+        public short MagicPoints { get { return (short)((this.Intelligence + this.Mind) * 10); } set { } }
 
         [Range(1, 10)]
         public short Intelligence { get; set; }

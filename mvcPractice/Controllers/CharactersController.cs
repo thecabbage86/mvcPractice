@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using mvcPractice.Models;
-using System.Web.Security;
-using System.Security.Claims;
 
 namespace mvcPractice.Controllers
 {
@@ -26,6 +20,7 @@ namespace mvcPractice.Controllers
         // GET: Characters
         public ActionResult Index()
         {
+            //TODO: use a view model
             return View(db.Characters.ToList());
         }
 
