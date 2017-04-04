@@ -26,12 +26,5 @@ namespace mvcPractice.Controllers
 
             return View();
         }
-
-        public ActionResult Character()
-        {
-            ViewBag.Message = "Your character sheet";
-
-            return View();
-        }
     }
 }
