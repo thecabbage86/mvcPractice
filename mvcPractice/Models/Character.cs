@@ -9,11 +9,25 @@ namespace mvcPractice.Models
 {
     public class Character
     {
+        public Character()
+        {
+        }
+
+        public Character(CreateEditCharacterViewModel createCharacter)
+        {
+            this.Name = createCharacter.Name;
+            this.Intelligence = createCharacter.Intelligence;
+            this.Mind = createCharacter.Mind;
+            this.Strength = createCharacter.Strength;
+            this.Vitality = createCharacter.Vitality;
+        }
+
         public int Id { get; set; }
         public Guid UserId { get; set; }
         public string Name { get; set; }
 
-        public short Health { get; set; }
+        public short Health { get { return (short)((this.Vitality + this.Strength) * 100); } }
+
         [Range(1, 10)]
         public short Intelligence { get; set; }
         [Range(1, 10)]
@@ -29,5 +43,7 @@ namespace mvcPractice.Models
     public class CharacterDBContext : DbContext
     {
         public DbSet<Character> Characters { get; set; }
+
+        public System.Data.Entity.DbSet<mvcPractice.Models.CreateEditCharacterViewModel> CreateEditCharacterViewModels { get; set; }
     }
 }

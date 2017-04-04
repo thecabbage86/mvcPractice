@@ -13,7 +13,7 @@ using System.Security.Claims;
 namespace mvcPractice.Controllers
 {
     [Authorize]
-    public class CharactersController : Controller
+    public class CharactersController : BaseController
     {
         private CharacterDBContext db;
 
@@ -55,36 +55,19 @@ namespace mvcPractice.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Intelligence,Vitality,Strength,Mind")] Character character)
+        public ActionResult Create([Bind(Include = "Id,Name,Intelligence,Vitality,Strength,Mind")] CreateEditCharacterViewModel createCharacter)
         {
             if (ModelState.IsValid)
             {
-                var claimsIdentity = User.Identity as ClaimsIdentity;
-                string userIdValue = null;
-                if (claimsIdentity != null)
-                {
-                    // the principal identity is a claims identity.
-                    // now we need to find the NameIdentifier claim
-                    var userIdClaim = claimsIdentity.Claims
-                        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-
-                    if (userIdClaim != null)
-                    {
-                        userIdValue = userIdClaim.Value;
-                    }
-                }
-
-                Guid userIdGuid;
-                character.UserId = userIdValue != null && Guid.TryParse(userIdValue, out userIdGuid) ? userIdGuid : Guid.Empty;
-
-                character.Health = (short)((character.Vitality + character.Strength) * 100);
+                Character character = new Character(createCharacter);
+                character.UserId = GetUserId();
 
                 db.Characters.Add(character);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(character);
+            return View(createCharacter);
         }
 
         // GET: Characters/Edit/5
@@ -94,12 +77,14 @@ namespace mvcPractice.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Character character = db.Characters.Find(id);
             if (character == null)
             {
                 return HttpNotFound();
             }
-            return View(character);
+
+            return View(new CreateEditCharacterViewModel(character));
         }
 
         // POST: Characters/Edit/5
@@ -107,17 +92,27 @@ namespace mvcPractice.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Intelligence,Vitality,Strength,Mind")] Character character)
+        public ActionResult Edit([Bind(Include = "Id,Name,Intelligence,Vitality,Strength,Mind")] CreateEditCharacterViewModel editCharacter)
         {
             if (ModelState.IsValid)
             {
-                character.Health = (short)((character.Vitality + character.Strength) * 100);
+                Character character = db.Characters.Find(editCharacter.Id);
+                if (character == null)
+                {
+                    return HttpNotFound();
+                }
+
+                character.Name = editCharacter.Name;
+                character.Intelligence = editCharacter.Intelligence;
+                character.Mind = editCharacter.Mind;
+                character.Strength = editCharacter.Strength;
+                character.Vitality = editCharacter.Vitality;
 
                 db.Entry(character).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(character);
+            return View(editCharacter);
         }
 
         // GET: Characters/Delete/5
