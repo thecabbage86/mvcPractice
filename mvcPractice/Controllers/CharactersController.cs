@@ -15,6 +15,7 @@ namespace mvcPractice.Controllers
         {
             Database.SetInitializer(new DropCreateDatabaseAlways<CharacterDBContext>());
             db = new CharacterDBContext();
+
         }
 
         // GET: Characters
